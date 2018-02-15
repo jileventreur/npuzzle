@@ -2,7 +2,6 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include "puzzle.class.hpp"
 #include "Parser.class.hpp"
 #include "ParserException.class.hpp"
 
