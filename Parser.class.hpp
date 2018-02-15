@@ -21,14 +21,20 @@ public:
 	void convert();
 	int display_line(int j, int exp, bool reverse);
 	int display_column(int j, int exp, bool reverse);
+	int check_solvency();
+	void parseOptions(std::string options); 
+	bool checkOptions(char c);
+	std::vector<int> getPuzzle();
+	std::vector<char> getOptions();
+	int getMax();
+	int getDim();
 
-	
-
-	//Ouais on les mettras en private tkt
-	std::map<int,int> puzzle; //bientot en vecteur
-	std::vector<int> good_puzzle;
-	int	_dim;
-	int _max;
 private:
+	int _row;
+	int _max;
+	int	_dim;
+	std::vector<char> _options;
+	std::vector<int> good_puzzle;
+	std::vector<int> puzzle; //bientot en vecteur
 };
 #endif
