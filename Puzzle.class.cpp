@@ -23,6 +23,7 @@ Puzzle::~Puzzle() {}
  //size_t Puzzle::get_neighbor(int & neighbor[MAX_NEIGHBOR]) const {};
 
 //TU VEUX QUOI EN RETURN ?
+//Switch directement dans le puzzle
  size_t Puzzle::switch_neighbor(edirection const neighbor) 
  {
  	size_t index = 0;
@@ -49,6 +50,7 @@ Puzzle::~Puzzle() {}
 
 
 //TU COMPTES UTILISER LES VALEURS DE RETOUR ??
+//Renvoie -1 si le move n'est pas possible
  size_t Puzzle::get_neighbor(int neighbor[MAX_NEIGHBOR]) const
  {
  	//std::cout << this->_blank - this->_dim << std::endl;
@@ -73,12 +75,17 @@ Puzzle::~Puzzle() {}
     }
 
  }
+
  std::string Puzzle::toString(void) const {
  	std::ostringstream oss;
     
     std::copy(this->_puzzle.begin(), this->_puzzle.end()-1,
         std::ostream_iterator<int>(oss, " "));
     oss << this->_puzzle.back();
-  return (oss.str()
-);
- };
+  return (oss.str());
+ }
+
+ std::vector<int> Puzzle::getPuzzle()
+ {
+ 	return (this->_puzzle);
+ }

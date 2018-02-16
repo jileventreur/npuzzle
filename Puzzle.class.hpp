@@ -17,6 +17,7 @@ public:
 	virtual size_t 			get_neighbor(int neighbor[MAX_NEIGHBOR]) const;
 	virtual size_t 			switch_neighbor(edirection const neighbor);
 	virtual std::string 	toString(void) const;
+	std::vector<int> 		getPuzzle();
     void		 			printPuzzle(void);
 private:
 	std::vector<int> 		_puzzle;
