@@ -7,19 +7,22 @@
 
 int main(int argc, char **argv) {
 	int i = 1;
+	std::vector<char> options;
 	Parser *parser = new Parser();
-	std::string buf;
-	//std::cout << argv[i] << std::endl;
+	Puzzle *pz;
+	int salut[4] = {0,0,0,0};
+	size_t x;
+	size_t y;
 	if (argc >= 3 && strncmp(argv[i], "--", 2) == 0)
 	{
-		parser->parseOptions(argv[i]);
+		options = parser->getOptions(argv[i]);
 		++i;
 	}
 	if (argc >= 2)
 	{
 		try
 		{
-			parser->open_file(argv[i]);
+			pz = parser->getPuzzle(argv[i]);
 		}
 		catch (ParserException &e)
 		{
@@ -36,13 +39,7 @@ int main(int argc, char **argv) {
 	{
 		exit(0);
 	}
-	parser->convert();
-	try {
-		parser->check_solvency();
-	} catch (std::exception &e) {
-		std::cout << "UNSOLVABLE" << std::endl;
-		exit(0);
-	}
+	delete pz;
 	delete parser;
 	return (1);
 }

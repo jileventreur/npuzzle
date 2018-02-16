@@ -1,5 +1,6 @@
 #ifndef PARSER_CLASS_HPP
 # define PARSER_CLASS_HPP
+# include "Puzzle.class.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -10,9 +11,10 @@ public:
 							Parser(const Parser&);
 							~Parser(void);
 	Parser 					&operator=(const Parser);
-	Puzzle 					*createPuzzle();
-	void 					open_file(std::string file);
-	int 					read_file(std::ifstream *f);
+	Puzzle					*getPuzzle(std::string file);
+	std::vector<char> 		getOptions(std::string options);
+
+private:
 	int 					analyze(std::string str);
 	std::string 			remove_comment(std::string str);
 	int						add_line_to_puzzle(std::string str);
@@ -24,17 +26,13 @@ public:
 	void 					parseOptions(std::string options); 
 	bool 					checkOptions(char c);
 	void 					setDim(std::string str);
-	int 					getDim();
-	int 					getMax();
-	std::vector<int> 		getPuzzle();
-	std::vector<char> 		getOptions();
-
-private:
+	void					add_to_the_row_puzzle(size_t tile_number);
+	size_t					_blank;
 	int 					_row;
 	int 					_max;
 	int						_dim;
 	std::vector<char> 		_options;
-	std::vector<int> 		good_puzzle;
-	std::vector<int> 		puzzle;
+	std::vector<int> 		_good_puzzle;
+	std::vector<int> 		_puzzle;
 };
 #endif

@@ -1,7 +1,7 @@
 #include "Parser.class.hpp"
 #include "ParserException.class.hpp"
 #include <map>
-
+#include "Puzzle.class.hpp"
 Parser::Parser() {
 	this->_dim = 0;
 	this->_row = 0;
@@ -17,7 +17,7 @@ bool Parser::checkOptions(char c)
 	return false;
 }
 
-void Parser::parseOptions(std::string options)
+std::vector<char> Parser::getOptions(std::string options)
 {
 	for(std::string::iterator it = options.begin(); it != options.end(); ++it)
 	{
@@ -27,26 +27,7 @@ void Parser::parseOptions(std::string options)
 			this->_options.push_back(*it);
 		}
 	}
-}
-
-std::vector<char> Parser::getOptions()
-{
 	return (this->_options);
-}
-
-int Parser::getDim()
-{
-	return (this->_dim);
-}
-
-int Parser::getMax()
-{
-	return (this->_max);
-}
-
-std::vector<int> Parser::getPuzzle()
-{
-	return (this->good_puzzle);
 }
 
 int Parser::check_solvency()
@@ -56,7 +37,7 @@ int Parser::check_solvency()
     {
         for (int j = i+1; j < this->_max; j++)
         {
-             if (this->good_puzzle[j] && this->good_puzzle[i] &&  this->good_puzzle[i] > this->good_puzzle[j])
+             if (this->_good_puzzle[j] && this->_good_puzzle[i] &&  this->_good_puzzle[i] > this->_good_puzzle[j])
                 inv_count++; 
         }
     }
@@ -65,6 +46,13 @@ int Parser::check_solvency()
     else
   		throw std::exception();
   	return (1);
+}
+
+void Parser::add_to_the_row_puzzle(size_t tile_number)
+{
+	this->_good_puzzle.push_back(this->_puzzle[tile_number]);
+	if (this->_puzzle[tile_number] == 0)
+		this->_blank = tile_number;
 }
 
 int Parser::display_line(int j, int exp, bool reverse)
@@ -78,9 +66,9 @@ int Parser::display_line(int j, int exp, bool reverse)
 	if (!reverse) {
 		while (get != exp)
 		{
-			if (std::find(this->good_puzzle.begin(), this->good_puzzle.end(), this->puzzle[i + j]) == this->good_puzzle.end())
+			if (std::find(this->_good_puzzle.begin(), this->_good_puzzle.end(), this->_puzzle[i + j]) == this->_good_puzzle.end())
 			{
-				this->good_puzzle.push_back(this->puzzle[i + j]);
+				add_to_the_row_puzzle(i+j);
 				++get;
 			}
 			++c;
@@ -93,9 +81,9 @@ int Parser::display_line(int j, int exp, bool reverse)
 		i = this->_dim - 1;
 		while (get != exp)
 		{
-			if (std::find(this->good_puzzle.begin(), this->good_puzzle.end(), this->puzzle[i + j])  == this->good_puzzle.end())
+			if (std::find(this->_good_puzzle.begin(), this->_good_puzzle.end(), this->_puzzle[i + j])  == this->_good_puzzle.end())
 			{
-				this->good_puzzle.push_back(this->puzzle[i + j]);
+				add_to_the_row_puzzle(i+j);;
 				++get;
 			}
 			--c;
@@ -116,9 +104,9 @@ int Parser::display_column(int j, int exp, bool reverse)
 	{
 		while (get != exp)
 		{
-			if (std::find(this->good_puzzle.begin(), this->good_puzzle.end(), this->puzzle[j + this->_dim * i])  == this->good_puzzle.end())
+			if (std::find(this->_good_puzzle.begin(), this->_good_puzzle.end(), this->_puzzle[j + this->_dim * i])  == this->_good_puzzle.end())
 			{
-				this->good_puzzle.push_back(this->puzzle[j + this->_dim * i]);
+				add_to_the_row_puzzle(j + this->_dim * i);
 				++get;
 			}
 			++i;
@@ -131,9 +119,9 @@ int Parser::display_column(int j, int exp, bool reverse)
 		i = this->_dim - 1;
 		while (get != exp)
 		{
-			if (std::find(this->good_puzzle.begin(), this->good_puzzle.end(), this->puzzle[j + this->_dim * i])  == this->good_puzzle.end())
+			if (std::find(this->_good_puzzle.begin(), this->_good_puzzle.end(), this->_puzzle[j + this->_dim * i])  == this->_good_puzzle.end())
 			{
-				this->good_puzzle.push_back(this->puzzle[j + this->_dim * i]);
+				add_to_the_row_puzzle(j + this->_dim * i);
 				++get;
 			}
 			--i;
@@ -148,7 +136,7 @@ void Parser::convert()
 	int i = 0;
 	bool reverse = false;
 	int dm = this->_dim;
-	while (this->good_puzzle.size() != this->_max) 
+	while (this->_good_puzzle.size() != this->_max) 
 	{
 		i = this->display_line(i, dm, reverse);
 		--dm;
@@ -157,28 +145,31 @@ void Parser::convert()
 	}
 }
 
-void Parser::open_file(std::string file) {
+Puzzle *Parser::getPuzzle(std::string file) {
+	std::string buff;
 	std::ifstream f(file);
 	if (f.is_open())
 	{
-		this->read_file(&f);
-	}
+		while (getline(f, buff))
+		{
+			this->analyze(buff);
+		}
+		if (!this->_dim || !this->_row || !this->_max)
+			throw ParserException("Problem");
+		if (this->_row != this->_dim)
+			throw ParserException("Doesn't respect dimension.");
+		}
 	else
 		throw ParserException("Can't open this file. Sorry.");
-}
-
-int Parser::read_file(std::ifstream *f) {
-	std::string buff;
-
-	while (getline(*f, buff))
-	{
-		this->analyze(buff);
+	this->convert();
+	try {
+		this->check_solvency();
+	} catch (std::exception &e) {
+		std::cout << "UNSOLVABLE" << std::endl;
+		exit(0);
 	}
-	if (!this->_dim || !this->_row || !this->_max)
-		throw ParserException("Problem");
-	if (this->_row != this->_dim)
-		throw ParserException("Doesn't respect dimension.");
-	return (1);
+	Puzzle *pz = new Puzzle(this->_puzzle, this->_dim, this->_blank);
+	return (pz);
 }
 
 std::string	Parser::remove_comment(std::string str)
@@ -210,9 +201,9 @@ int	Parser::add_line_to_puzzle(std::string str)
     	if (!this->is_number(buf))
     		throw ParserException("Puzzle error - Not a number.");
 		nb = std::stoi(buf,nullptr,10);
-		if (nb >= this->_max || std::find(this->puzzle.begin(), this->puzzle.end(), nb) != this->puzzle.end())
+		if (nb >= this->_max || std::find(this->_puzzle.begin(), this->_puzzle.end(), nb) != this->_puzzle.end())
 			throw ParserException("Puzzle error configuration error.");
-		this->puzzle.push_back(nb);
+		this->_puzzle.push_back(nb);
 		++i;
     }
     return (1);
