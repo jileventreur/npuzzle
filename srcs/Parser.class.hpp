@@ -27,10 +27,11 @@ private:
 	bool 					checkOptions(char c);
 	void 					setDim(std::string str);
 	void					add_to_the_row_puzzle(size_t tile_number);
+
 	size_t					_blank;
-	int 					_row;
-	int 					_max;
-	int						_dim;
+	size_t 					_row;
+	size_t 					_max;
+	size_t					_dim;
 	std::vector<char> 		_options;
 	std::vector<int> 		_good_puzzle;
 	std::vector<int> 		_puzzle;

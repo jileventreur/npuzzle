@@ -10,9 +10,9 @@ int main(int argc, char **argv) {
 	std::vector<char> options;
 	Parser *parser = new Parser();
 	Puzzle *pz;
-	int salut[4] = {0,0,0,0};
-	size_t x;
-	size_t y;
+	// int salut[4] = {0,0,0,0};
+	// size_t x;
+	// size_t y;
 	if (argc >= 3 && strncmp(argv[i], "--", 2) == 0)
 	{
 		options = parser->getOptions(argv[i]);
@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
 		try
 		{
 			pz = parser->getPuzzle(argv[i]);
+			pz->printPuzzle(); // std::cout << "OUT\n";
 		}
 		catch (ParserException &e)
 		{

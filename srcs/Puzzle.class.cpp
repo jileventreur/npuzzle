@@ -65,7 +65,7 @@ Puzzle::~Puzzle() {}
  	int i;
 
  	i = 0;
- 	std::cout << "________________________________" << std::endl;
+ 	// std::cout << "________________________________" << std::endl;
     for(std::vector<int>::iterator it=this->_puzzle.begin(); it!=this->_puzzle.end(); ++it)
     {
         std::cout << *it << " ";
@@ -73,7 +73,7 @@ Puzzle::~Puzzle() {}
     	if (i % this->_dim == 0)
     		std::cout << std::endl;
     }
-
+ 	// std::cout << "________________________________" << std::endl;
  }
 
  std::string Puzzle::toString(void) const {

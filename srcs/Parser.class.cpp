@@ -2,7 +2,9 @@
 #include "ParserException.class.hpp"
 #include <map>
 #include "Puzzle.class.hpp"
-Parser::Parser() {
+
+Parser::Parser()
+{
 	this->_dim = 0;
 	this->_row = 0;
 }
@@ -23,7 +25,7 @@ std::vector<char> Parser::getOptions(std::string options)
 	{
 		if (this->checkOptions(*it))
 		{
-	    	std::cout << *it << std::endl;
+			std::cout << *it << std::endl;
 			this->_options.push_back(*it);
 		}
 	}
@@ -33,19 +35,19 @@ std::vector<char> Parser::getOptions(std::string options)
 int Parser::check_solvency()
 {
 	int inv_count = 0;
-    for (int i = 0; i < this->_max; i++)
-    {
-        for (int j = i+1; j < this->_max; j++)
-        {
-             if (this->_good_puzzle[j] && this->_good_puzzle[i] &&  this->_good_puzzle[i] > this->_good_puzzle[j])
-                inv_count++; 
-        }
-    }
-    if (inv_count%2 == 0)
-    	std::cout << "SOLVABLE" << std::endl;
-    else
-  		throw std::exception();
-  	return (1);
+	for (size_t i = 0; i < this->_max; i++)
+	{
+		for (size_t j = i+1; j < this->_max; j++)
+		{
+			 if (this->_good_puzzle[j] && this->_good_puzzle[i] &&  this->_good_puzzle[i] > this->_good_puzzle[j])
+				inv_count++; 
+		}
+	}
+	if (inv_count%2 == 0)
+		std::cout << "SOLVABLE" << std::endl;
+	else
+		throw std::exception();
+	return (1);
 }
 
 void Parser::add_to_the_row_puzzle(size_t tile_number)
@@ -164,7 +166,8 @@ Puzzle *Parser::getPuzzle(std::string file) {
 	this->convert();
 	try {
 		this->check_solvency();
-	} catch (std::exception &e) {
+	} 
+	catch (std::exception &e) {
 		std::cout << "UNSOLVABLE" << std::endl;
 		exit(0);
 	}
@@ -174,7 +177,7 @@ Puzzle *Parser::getPuzzle(std::string file) {
 
 std::string	Parser::remove_comment(std::string str)
 {
-	int has_comment;
+	size_t has_comment;
 	has_comment = str.find_first_of("#");
 	std::string new_string = str;
 
@@ -188,25 +191,25 @@ std::string	Parser::remove_comment(std::string str)
 int	Parser::add_line_to_puzzle(std::string str)
 {
 	static int i = 0;
-	int nb;
-    std::string buf;
-    std::stringstream ss(str);
- 	int dist =  std::distance(std::istream_iterator<std::string>(
-                           std::istringstream(str) >> std::ws),
-                           std::istream_iterator<std::string>());
- 	if (dist != this->_dim)
- 		throw ParserException("Doesn't respect dimension.");
-    while (ss >> buf)
-    {
-    	if (!this->is_number(buf))
-    		throw ParserException("Puzzle error - Not a number.");
+	size_t nb;
+	std::string buf;
+	std::stringstream ss(str);
+	size_t dist =  std::distance(std::istream_iterator<std::string>(
+	std::istringstream(str) >> std::ws),
+	std::istream_iterator<std::string>());
+	if (dist != this->_dim)
+		throw ParserException("Doesn't respect dimension.");
+	while (ss >> buf)
+	{
+		if (!this->is_number(buf))
+			throw ParserException("Puzzle error - Not a number.");
 		nb = std::stoi(buf,nullptr,10);
 		if (nb >= this->_max || std::find(this->_puzzle.begin(), this->_puzzle.end(), nb) != this->_puzzle.end())
 			throw ParserException("Puzzle error configuration error.");
 		this->_puzzle.push_back(nb);
 		++i;
-    }
-    return (1);
+	}
+	return (1);
 }
 
 int Parser::analyze(std::string str)
@@ -240,7 +243,7 @@ void Parser::setDim(std::string str)
 
 bool Parser::is_number(std::string& s)
 {
-    std::string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) ++it;
-    return !s.empty() && it == s.end();
+	std::string::const_iterator it = s.begin();
+	while (it != s.end() && std::isdigit(*it)) ++it;
+	return !s.empty() && it == s.end();
 }

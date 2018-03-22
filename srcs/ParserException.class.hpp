@@ -10,6 +10,6 @@ class ParserException : public std::runtime_error
 		ParserException(char const *message) throw();
 		virtual const char* what() const throw();
 	private:
-		const char* _msg;
+		// const char* _msg;
 };
 #endif
