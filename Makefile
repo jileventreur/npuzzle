@@ -10,6 +10,8 @@ FILES = main.cpp \
 		Parser.class.cpp \
 		ParserException.class.cpp \
 		Puzzle.class.cpp \
+		Node.class.cpp \
+		AStar.class.cpp \
 
 SRC := $(addprefix $(DIR_SRC), $(FILES))
 

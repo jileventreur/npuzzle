@@ -3,12 +3,17 @@
 #include <map>
 #include "Puzzle.class.hpp"
 
-Parser::Parser()
-{
-	this->_dim = 0;
-	this->_row = 0;
-}
+Parser::Parser() : _row(0), _dim(0) {}
 Parser::~Parser() {}
+Parser &Parser::operator=(Parser const & rhs) 
+{
+	if (this == &rhs)
+		return (*this);
+	this->_dim = rhs._dim;
+	this->_row = rhs._row;
+	return (*this);
+}
+
 
 bool Parser::checkOptions(char c)
 {
@@ -169,9 +174,10 @@ Puzzle *Parser::getPuzzle(std::string file) {
 	} 
 	catch (std::exception &e) {
 		std::cout << "UNSOLVABLE" << std::endl;
-		exit(0);
+		// exit(0);
 	}
 	Puzzle *pz = new Puzzle(this->_puzzle, this->_dim, this->_blank);
+	std::cout << "blank : " << this->_blank << std::endl;
 	return (pz);
 }
 

@@ -3,13 +3,14 @@
 #include <string>
 #include <list>
 #include "Parser.class.hpp"
+#include "AStar.class.hpp"
 #include "ParserException.class.hpp"
 
 int main(int argc, char **argv) {
 	int i = 1;
 	std::vector<char> options;
 	Parser *parser = new Parser();
-	Puzzle *pz;
+	Puzzle *p;
 	// int salut[4] = {0,0,0,0};
 	// size_t x;
 	// size_t y;
@@ -22,8 +23,10 @@ int main(int argc, char **argv) {
 	{
 		try
 		{
-			pz = parser->getPuzzle(argv[i]);
-			pz->printPuzzle(); // std::cout << "OUT\n";
+			p = parser->getPuzzle(argv[i]);
+			p->printPuzzle(); // std::cout << "OUT\n";
+			AStar solver;
+			solver.solve_puzzle(p);
 		}
 		catch (ParserException &e)
 		{
@@ -40,7 +43,7 @@ int main(int argc, char **argv) {
 	{
 		exit(0);
 	}
-	delete pz;
+	delete p;
 	delete parser;
 	return (1);
 }

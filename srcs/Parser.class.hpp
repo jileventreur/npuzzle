@@ -10,7 +10,7 @@ public:
 							Parser(void);
 							Parser(const Parser&);
 							~Parser(void);
-	Parser 					&operator=(const Parser);
+	Parser 					&operator=(const Parser &);
 	Puzzle					*getPuzzle(std::string file);
 	std::vector<char> 		getOptions(std::string options);
 
