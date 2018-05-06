@@ -48,7 +48,7 @@ int Parser::check_solvency()
 				inv_count++; 
 		}
 	}
-	if (inv_count%2 == 0)
+	if (inv_count % 2 == 0)
 		std::cout << "SOLVABLE" << std::endl;
 	else
 		throw std::exception();
@@ -177,7 +177,7 @@ Puzzle *Parser::getPuzzle(std::string file) {
 		// exit(0);
 	}
 	Puzzle *pz = new Puzzle(this->_puzzle, this->_dim, this->_blank);
-	std::cout << "blank : " << this->_blank << std::endl;
+	// std::cout << "blank : " << this->_blank << std::endl;
 	return (pz);
 }
 

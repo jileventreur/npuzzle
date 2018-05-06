@@ -7,7 +7,7 @@
 #include <algorithm>  
 #include "IPuzzle.hpp"
 
-class Puzzle : IPuzzle {
+class Puzzle {
 public:
 							Puzzle();
 							Puzzle(std::vector<int> puzzle, size_t dim, size_t blank);
@@ -15,12 +15,11 @@ public:
 	virtual					~Puzzle(void);
 	Puzzle 					&operator=(const Puzzle &);
 	virtual size_t			get_case(size_t x, size_t y) const;
-	virtual size_t 			get_size(void) const;
+	virtual size_t 			get_dim(void) const;
 	virtual void 			get_blank(size_t &x, size_t &y) const;
-	virtual size_t 			get_neighbor(int neighbor[MAX_NEIGHBOR]) const;
+	virtual size_t 			get_neighbors(Puzzle (&neighbors)[MAX_NEIGHBORS]) const;
 	virtual size_t 			switch_neighbor(edirection const neighbor);
 	virtual std::string 	toString(void) const;
-	std::vector<int> 		getPuzzle();
 	void		 			printPuzzle(void);
 
 private:

@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 		try
 		{
 			p = parser->getPuzzle(argv[i]);
-			p->printPuzzle(); // std::cout << "OUT\n";
+			// p->printPuzzle(); // std::cout << "OUT\n";
 			AStar solver;
 			solver.solve_puzzle(p);
 		}
